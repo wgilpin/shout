@@ -1,0 +1,71 @@
+application: shout-about
+version: 7
+runtime: python27
+api_version: 1
+threadsafe: yes
+default_expiration: "1d"
+
+builtins:
+- deferred: on
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: /(.*\.(appcache|manifest))
+  mime_type: text/cache-manifest
+  static_files: static/\1
+  upload: static/(.*\.(appcache|manifest))
+  expiration: "0m"
+
+- url: /static/images
+  static_dir: static/css/images
+
+- url: /static/templates
+  static_dir: static/js/templates
+
+- url: /static/js
+  static_dir: static/js
+
+- url: /static/css
+  static_dir: static/css
+
+- url: /static
+  static_dir: static
+
+- url: /img
+  script: main.app
+
+- url: /_ah/queue/deferred
+  script: google.appengine.ext.deferred.deferred.application
+  login: admin
+
+- url: /api/ClearUserChanges
+  script: main.app
+  login: admin
+
+
+- url: /www
+  script: main.app
+  secure: never
+
+- url: /index.html
+  script: main.app
+  secure: never
+
+- url: /
+  script: main.app
+  secure: never
+
+- url: .*
+  script: main.app
+  secure: always
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+
+- name: ssl
+  version: latest
+
